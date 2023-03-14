@@ -18,15 +18,17 @@ const thoughtSchema = new Schema({
         type: String,
         required: true
     },
-    reactions: [reactionSchema]
+    reactions: [reactionSchema],
 },
 {
     toJSON: {
         virtuals: true,
         getters: true
     },
-    id: false
-});
+    id: false,
+},
+{timestamps: true}
+);
 
 // get total count of reactions on retrieval
 thoughtSchema.virtual('reactionCount').get(function() {
