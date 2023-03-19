@@ -12,7 +12,7 @@ const thoughtSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        get: createdAtVal => dateFormat(createdAtVal)
+        get: createdAtVal => createdAtVal.toLocaleDateString()
     },
     username: {
         type: String,
@@ -27,7 +27,6 @@ const thoughtSchema = new Schema({
     },
     id: false,
 },
-{timestamps: true}
 );
 
 // get total count of reactions on retrieval
