@@ -7,7 +7,6 @@ module.exports = {
         .then(async (thoughts) => {
           const thoughtObj = {
             thoughts,
-            headCount: await headCount(),
           };
           return res.json(thoughtObj);
         })
@@ -23,10 +22,7 @@ module.exports = {
         .then(async (thought) =>
           !thought
             ? res.status(404).json({ message: 'No thought with that ID' })
-            : res.json({
-                thought,
-                grade: await grade(req.params.thoughtId),
-              })
+            : res.json(thought)
         )
         .catch((err) => {
           console.log(err);
@@ -52,6 +48,28 @@ module.exports = {
       )
         .catch((err) => res.status(500).json(err));
     },
+
+    updateThought(req, res) {
+      Thought.findByIdAndUpdate(
+        req.params.thoughtId,
+        {
+          $set: req.body
+        },
+        {
+          new: true
+        }).then((thought) => {
+          if (!thought) {
+            return res.status(404).json({
+              message: 'No thought found with that ID'
+            });
+          }
+          return res.json(thought);
+        }).catch((err) => {
+          console.log(err);
+          return res.status(500).json(err);
+        });
+      },
+
     // Delete a thought and remove them from the course
     deleteThought(req, res) {
       Thought.findOneAndRemove({ _id: req.params.thoughtId })
