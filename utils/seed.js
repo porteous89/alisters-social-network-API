@@ -7,10 +7,10 @@ connection.on('error', (err) => err);
 connection.once('open', async () => {
   console.log('connected');
 
-  // Drop existing courses
+  // Drop existing users
   await User.deleteMany({});
 
-  // Drop existing students
+  // Drop existing thoughts
   await Thought.deleteMany({});
 
     // Add userss to the collection and await the results
