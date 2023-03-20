@@ -70,7 +70,7 @@ module.exports = {
         });
       },
 
-    // Delete a thought and remove them from the course
+    // Delete a thought 
     deleteThought(req, res) {
       Thought.findOneAndRemove({ _id: req.params.thoughtId })
         .then((thought) =>
@@ -85,7 +85,7 @@ module.exports = {
         .then((user) =>
           !user
             ? res.status(404).json({
-                message: 'thought deleted, but no courses found',
+                message: 'thought deleted',
               })
             : res.json({ message: 'thought successfully deleted' })
         )
@@ -116,7 +116,7 @@ module.exports = {
   removeReaction(req, res) {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
-      { $pull: { reaction: { reactionId: req.params.reactionId } } },
+      { $pull: { reactions: { reactionId: req.params.reactionId } } },
       { runValidators: true, new: true }
     )
       .then((thought) =>
