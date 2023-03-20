@@ -1,7 +1,7 @@
 const {User, Thought } = require('../models');
 
 module.exports = {
-    // Get all courses
+    // Get all users
     getUsers(req, res) {
       User.find()
       .populate('thoughts')
@@ -54,5 +54,34 @@ module.exports = {
         )
         .catch((err) => res.status(500).json(err));
     },
-  };
-  
+
+
+// Add a friend
+addFriend(req, res) {
+  User.findOneAndUpdate(
+    { _id: req.params.userId },
+    { $addToSet: { friends: req.params.friendId } },
+    { new: true }
+  )
+    .then((user) =>
+      !user
+        ? res.status(404).json({ message: 'No User with this id!' })
+        : res.json(user)
+    ) 
+    .catch((err) => res.status(500).json(err));
+},
+// Remove a friend
+removeFriend(req, res) {
+  User.findOneAndUpdate(
+    { _id: req.params.userId },
+    { $pull: { friends: req.params.friendId } },
+    { new: true }
+  )
+    .then((user) =>
+      !user
+        ? res.status(404).json({ message: 'No User with this id!' })
+        : res.json(user)
+    )
+    .catch((err) => res.status(500).json(err));
+}
+};
